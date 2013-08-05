@@ -1,0 +1,24 @@
+/*
+  DrawSelect
+*/
+
+[data-selectarea] {
+  position: relative;
+	-webkit-user-select: none;
+}
+[data-canvas] {
+	position: absolute;
+	top: 0;
+	left: 0;
+  background: transparent;
+  z-index: 10;
+}
+[data-items] {
+	width: 100%;
+	background: transparent;
+  position: relative;
+  z-index: 5;
+}
+  [data-items] li {
+    pointer-events: none;
+  }

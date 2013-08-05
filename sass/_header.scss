@@ -1,0 +1,22 @@
+.header {
+  width: 100%;
+  padding: 0.5em;
+  background: #333;
+  color: #fff;
+  
+  h1 {
+    display: inline-block;
+    margin: 0;
+    font-size: 1.5em;
+    color: #fff;
+  }
+
+  .links {
+    float: right;
+    list-style-type: none;
+    
+    li {
+      display: inline-block;
+    }
+  }
+}

@@ -1,0 +1,45 @@
+.album-list {  
+  width: 100%;
+  overflow-x: scroll;
+  -webkit-overflow-scrolling: touch;
+  
+  // Title
+  h2 {
+    margin-left: 0.5em;
+    color: #666;
+    font-size: 1em;
+    text-transform: uppercase;
+  }
+  
+  // Album grid
+  ul {
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style-type: none;
+    white-space: nowrap;
+    
+    // Album item
+    li {
+      display: inline-block;
+      position: relative;
+      width: emCalc(100px);
+      height: emCalc(100px);
+      background: #ccc;
+      
+      @media #{$small} {
+        width: emCalc(300px);
+        height: emCalc(169px);
+      }
+    }
+    // Album name
+    a {
+      position: absolute;
+      bottom: 0.5em;
+      right: 0.5em;
+      
+      @media #{$small} {
+        font-size: 1.25em;
+      }
+    }
+  }
+}
