@@ -4,18 +4,25 @@
 
 [data-selectarea] {
   position: relative;
-	-webkit-user-select: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  .editable & {
+    -ms-touch-action: none;
+  }
 }
 [data-canvas] {
-	position: absolute;
-	top: 0;
-	left: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
   background: transparent;
   z-index: 10;
 }
 [data-items] {
-	width: 100%;
-	background: transparent;
+  width: 100%;
+  background: transparent;
+  padding: 1em;
   position: relative;
   z-index: 5;
 }
