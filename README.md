@@ -4,13 +4,20 @@ Wrangle is an experimental jQuery plugin created by ZURB, a product design compa
 
 ## Setup
 
-After cloning/downloading the repository to your local machine, you'll need to compile the Sass files once to get going:
+To start, clone or download the file to your local machine.
 
-  cd wrangle-demo
-  compass watch .
+    $ git clone https://github.com/zurb/wrangle-demo.git
+    
+This demo requires Foundation and Compass. Make sure you've got the gems for both installed:
 
-Make sure you have the `compass` and `zurb-foundation` gems installed on your machine.
+    $ gem install compass
+    $ gem install zurb-foundation
+
+You'll need to compile the Sass files once to get going.
+
+    $ cd wrangle-demo
+    $ compass watch .
 
 ## More Info
 
-You can find the full documentation for Wrangle on its GitHub repository. Also be sure to check out Wrangle's page on ZURBplayground.
+You can find the full documentation for Wrangle on its [GitHub repository](http://github.com/zurb/wrangle). Also be sure to check out Wrangle's page on [ZURBplayground](http://zurb.com/playground/wrangle-jquery-plugin).
