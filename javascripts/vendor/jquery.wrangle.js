@@ -1,6 +1,6 @@
 ;(function($) {
 
-  var DrawSelect = function(elem, settings, actions) {
+  var Wrangle = function(elem, settings, actions) {
 
     /*
       Properties
@@ -12,7 +12,7 @@
     this.$container  = elem;
     this.$selectarea = this.$container.find('[data-selectarea]')
     this.canvas      = this.$container.find('canvas')[0];
-    this.$list       = this.$container.find('[data-items]').eq(0);
+    this.$list       = this.$container.find('[data-list]').eq(0);
     this.$items      = this.$list.children('li');
     this.draw        = this.canvas.getContext('2d');
 
@@ -25,6 +25,7 @@
       selectedClass: 'selected',
       selectToggle: false,
       touchMode: 'auto',
+      multiTouch: false,
       clearOnCancel: true,
     }
 
@@ -47,6 +48,8 @@
     if (typeof window.ontouchstart !== 'undefined') this.touchSupport = true;
     // Microsoft special edition touch events?
     if (window.navigator.msPointerEnabled) this.msTouchSupport = true;
+
+    if (!this.touchSupport) this.settings.multiTouch = false;
 
     // Drawing enabled
     this.drawEnabled = !this.touchSupport || this.settings.touchMode === 'auto' ? true : false;
@@ -133,7 +136,7 @@
       var count = this;
       count.innerHTML = '0 items selected';
 
-      self.$container.on('drawselect.countChange', function() {
+      self.$container.on('wrangle.countchange', function() {
         count.innerHTML = self.selectedItems.length + ' item' + (self.selectedItems.length !== 1 ? 's' : '') + ' selected';
       });
     });
@@ -144,7 +147,7 @@
 
     // Drawing
     this.$selectarea.on(this.events.start, function(e) {
-      if (self.drawEnabled) self.startDrawing(e);
+      if (self.drawEnabled || self.drawEnabled && !self.settings.multiTouch && !self.drawInProgress) self.startDrawing(e);
     });
 
     // Cancelling drawing
@@ -204,9 +207,9 @@
   /*
     Resize the canvas to match the size of the list container
 
-    Doesn't return anything
+    No return value
   */
-  DrawSelect.prototype.sizeCanvas = function() {
+  Wrangle.prototype.sizeCanvas = function() {
     this.canvas.width  = this.$list.outerWidth();
     this.canvas.height = this.$list.outerHeight();
   }
@@ -215,7 +218,7 @@
 
     Returns an array of Rectangle objects indicating the size/location of each list item
   */
-  DrawSelect.prototype.getBoxes = function() {
+  Wrangle.prototype.getBoxes = function() {
     var boxes = [];
     this.$items.each(function() {
       var x = $(this).position().left + parseInt($(this).css('margin-left'));
@@ -235,31 +238,37 @@
 
     Returns an array of coordinates based on mouse/touch movement
   */
-  DrawSelect.prototype.getCoords = function(event) {
+  Wrangle.prototype.getCoords = function(event) {
     var self = this;
     var coords = [];
     var offset = self.$container.offset();
 
-    if (this.msTouchSupport) {
-      coords[event.originalEvent.pointerId] = {
+    // MSPointer event
+    if (event.type.match(/MS/)) {
+      coords[event.originalEvent.pointerId.toString()] = {
         x: event.originalEvent.pageX - offset.left,
         y: event.originalEvent.pageY - offset.top,
       };
     }
+    // Mouse event
     else if (event.type.match(/mouse/)) {
       coords.push({
         x: event.pageX - offset.left,
         y: event.pageY - offset.top,
       });
     }
+    // Touch event
     else {
       $.each(event.originalEvent.targetTouches, function() {
         coords.push({
           x: this.pageX - offset.left,
           y: this.pageY - offset.top,
         })
-      });
+      });    
     }
+
+    // Only hand over one set of coordinates if multi touch isn't enabled
+    if (!this.settings.multiTouch) coords = coords.slice(0, 1);
 
     return coords;
   }
@@ -272,7 +281,7 @@
 
     Returns list of selections made
   */
-  DrawSelect.prototype.checkCollision = function(coords, prev) {
+  Wrangle.prototype.checkCollision = function(coords, prev) {
     var self = this, last = [];
 
     // For each box...
@@ -314,7 +323,9 @@
 
     Returns false to prevent default event behavior (namely, viewport scrolling on touch devices)
   */
-  DrawSelect.prototype.startDrawing = function(e) {
+  Wrangle.prototype.startDrawing = function(e) {
+    if (!this.settings.multiTouch && this.drawInProgress) return false;
+
     var self = this, lastElems = [];
 
     // Only do setup once
@@ -334,6 +345,7 @@
       });
     }
 
+    // Mouse/touch/pointer move event (this is where the drawing happens)
     this.$selectarea.on(this.events.move, function(e) {
       self.drawInProgress = true;
       var evt = e.originalEvent;
@@ -366,7 +378,7 @@
 
     Returns false to prevent default event behavior
   */
-  DrawSelect.prototype.stopDrawing = function() {
+  Wrangle.prototype.stopDrawing = function() {
     var self = this;
 
     this.drawInProgress = false;
@@ -394,11 +406,14 @@
     @param to: an object with X and Y coordinates representing the end of the stroke
     @param context: a CanvasRenderingContext2D object to draw with
 
-    Doesn't return anything
+    No return value
   */
-  DrawSelect.prototype.drawLine = function(from, to, context) {
+  Wrangle.prototype.drawLine = function(from, to, context) {
     context.strokeStyle = this.settings.lineColor;
-    context.lineWidth = this.settings.lineWidth;
+    context.lineWidth   = this.settings.lineWidth;
+    context.lineJoin    = 'round';
+    context.lineCap     = 'round';
+
     context.beginPath();
     context.moveTo(from.x, from.y);
     context.lineTo(to.x, to.y);
@@ -412,9 +427,9 @@
     @param to: an array of objects with X and Y coordinates representing the ends of strokes
     @param context: a CanvasRenderingContext2D object to draw with
 
-    Doesn't return anything
+    No return value
   */
-  DrawSelect.prototype.multiDrawLine = function(from, to, context) {
+  Wrangle.prototype.multiDrawLine = function(from, to, context) {
     var self = this;
 
     $.each(from, function(i) {
@@ -428,39 +443,54 @@
     @param elem: jQuery element representing DOM element to be added to the selection
     @param index: index of the bounding box of the selected item
 
-    Doesn't return anything
+    No return value
   */
-  DrawSelect.prototype.select = function(elem, index) {
+  Wrangle.prototype.select = function(elem, index) {
     this.selectedItems.push(elem[0]);
     if (typeof index === 'number') delete this.itemBoxes[index];
     elem.addClass(this.settings.selectedClass);
-    this.$container.trigger('drawselect.countChange');
+    this.$container.trigger('wrangle.countchange');
   }
   /*
+    Select all items.
 
+    No return value
   */
-  DrawSelect.prototype.selectAll = function() {
+  Wrangle.prototype.selectAll = function() {
     var self = this;
     this.selectedItems = [];
     this.$items.each(function() {
       self.select(this);
     });
-    this.$container.trigger('drawselect.countChange');
   }
-  DrawSelect.prototype.deselect = function(elem) {
+
+  /*
+    Deselect an item. The item is removed from the selection array and a recount is triggered.
+    TODO: A deselected item would need its bounding box readded to the list if selectToggle is enabled.
+
+    @param elem: jQuery element representing DOM element to be removed from the selection
+
+    No return value
+  */
+  Wrangle.prototype.deselect = function(elem) {
     var index, self = this;
     $.each(this.selectedItems, function(index) {
       if (this === elem[0]) {
         self.selectedItems.splice(index, 1);
         elem.removeClass('selected');
-        self.$container.trigger('drawselect.countChange');
+        self.$container.trigger('wrangle.countchange');
       }
     });
   }
-  DrawSelect.prototype.deselectAll = function() {
+  /*
+    Deselect all items.
+
+    No return value
+  */
+  Wrangle.prototype.deselectAll = function() {
     this.selectedItems = [];
     this.$items.removeClass('selected');
-    this.$container.trigger('drawselect.countChange');
+    this.$container.trigger('wrangle.countchange');
   }
 
   /*  ===============
@@ -468,18 +498,27 @@
       =============== */
 
   var Rectangle = function(x, y, w, h) {
+    // Create a bounding box for the rectangle
     this.top = y;
     this.bottom = y + h;
     this.left = x;
     this.right = x + w;
   }
+  /*
+    Check if the given coordinates intersect with the bounding box of the rectangle.
+
+    @param x: X coordinate value
+    @param y: Y coordinate value
+
+    Returns true for an intersect, false for no intersect
+  */
   Rectangle.prototype.intersects = function(x, y) {
     return (x >= this.left && x <= this.right && y >= this.top && y <= this.bottom);
   }
 
-  $.fn.drawselect = function(settings, actions) {
-    return $(this).find('[data-drawselect]').addBack('[data-drawselect]').each(function() {
-      var ds = new DrawSelect($(this), settings, actions);
+  $.fn.wrangle = function(settings, actions) {
+    return $(this).find('[data-wrangle]').addBack('[data-wrangle]').each(function() {
+      var ds = new Wrangle($(this), settings, actions);
     }).end();
   }
 
