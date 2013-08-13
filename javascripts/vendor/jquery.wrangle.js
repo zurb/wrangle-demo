@@ -112,6 +112,9 @@
         }
       });
     }
+    else {
+      this.$container.addClass(this.settings.editableClass);
+    }
 
     // Custom actions
 
@@ -245,7 +248,7 @@
 
     // MSPointer event
     if (event.type.match(/MS/)) {
-      coords[event.originalEvent.pointerId.toString()] = {
+      coords.push = {
         x: event.originalEvent.pageX - offset.left,
         y: event.originalEvent.pageY - offset.top,
       };
@@ -446,9 +449,9 @@
     No return value
   */
   Wrangle.prototype.select = function(elem, index) {
-    this.selectedItems.push(elem[0]);
+    this.selectedItems.push(elem);
     if (typeof index === 'number') delete this.itemBoxes[index];
-    elem.addClass(this.settings.selectedClass);
+    $(elem).addClass(this.settings.selectedClass);
     this.$container.trigger('wrangle.countchange');
   }
   /*

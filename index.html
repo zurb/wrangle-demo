@@ -30,22 +30,22 @@
         <canvas data-canvas></canvas>
         <ul data-list>
           <li data-photo="1">
-            <img src="http://placekitten.com/400/300" alt="Photo">
+            <img src="http://placehold.it/4x3" alt="Photo">
           </li>
           <li data-photo="1">
-            <img src="http://placekitten.com/400/300" alt="Photo">
+            <img src="http://placehold.it/4x3" alt="Photo">
           </li>
           <li data-photo="1">
-            <img src="http://placekitten.com/400/300" alt="Photo">
+            <img src="http://placehold.it/4x3" alt="Photo">
           </li>
           <li data-photo="1">
-            <img src="http://placekitten.com/400/300" alt="Photo">
+            <img src="http://placehold.it/4x3" alt="Photo">
           </li>
           <li data-photo="1">
-            <img src="http://placekitten.com/400/300" alt="Photo">
+            <img src="http://placehold.it/4x3" alt="Photo">
           </li>
           <li data-photo="1">
-            <img src="http://placekitten.com/400/300" alt="Photo">
+            <img src="http://placehold.it/4x3" alt="Photo">
           </li>
           <li data-photo="1">
             <img src="http://placehold.it/4x3" alt="Photo">
@@ -117,8 +117,9 @@
 
         <div class="edit-toolbar">
           <a class="secondary button" data-edit>Cancel</a>
+          <a class="button" data-all>Select All</a>
           <a class="button" data-action="star">Star</a>
-          <a class="button" data-action="invert">Invert</a>
+          <!-- <a class="button" data-action="invert">Invert</a> -->
           <a class="alert button" data-action="delete">Delete</a>
         </div>
       </div>
@@ -129,7 +130,7 @@
   <div id="about" class="reveal-modal">
     <a class="close-reveal-modal">x</a>
     <h2>About this demo</h2>
-    <p>This is a demonstration of Wrangle, a jQuery plugin developed by ZURB.</p>
+    <p>This is a demonstration of Wrangle, a jQuery plugin developed by ZURB. Learn more about this plugin on <a href="http://zurb.com/playground/wrangle-jquery-plugin">ZURBplayground</a>.</p>
   </div>
 
   <div class="photo-viewer">
@@ -146,56 +147,5 @@
   <script src="javascripts/vendor/jquery.wrangle.js"></script>
   <script src="javascripts/app.js"></script>
   
-  <script>
-    var options = {
-      touchMode: 'auto',
-      selectToggle: false,
-      multiTouch: true,
-    };
-    var actions = {
-      'delete': function(items) {
-        if (items.length > 0) {
-          str = 'Are you sure you want to delete ';
-          str += items.length === 1 ? 'this photo?' : ('these ' + items.length + ' photos?');
-          if (confirm(str)) {
-            items.remove();
-            return false;
-          }
-        }
-      },
-      'star': function(items) {
-        items.toggleClass('starred');
-      },
-      'invert': function(items) {
-        items.toggleClass('inverted');
-      }
-    };
-
-    $(document).foundation();
-    $(window).on('load', function() {
-      $(document).wrangle(options, actions);
-    });
-
-    var $container = $('[data-wrangle]').eq(0);
-    var $modal     = $('.photo-viewer').eq(0);
-    var $modalImg  = $modal.children('img').eq(0);
-
-    $('[data-list] > li').click(function() {
-      if (!$container.hasClass('editable')) {
-        $modalImg.attr('src', $(this).children('img').attr('src'));
-
-        if ($(this).hasClass('inverted'))
-          $modal.addClass('inverted');
-        else
-          $modal.removeClass('inverted');
-
-        $modal.fadeIn(250);
-      }
-    });
-    $modal.on('click touchstart', function() {
-      $modal.fadeOut(250);
-      return false;
-    });
-  </script>
 </body>
 </html>
