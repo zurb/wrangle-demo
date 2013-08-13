@@ -2,12 +2,10 @@
   padding-bottom: 3em;
 }
 
-.demo-main {
-  
-}
-
+// Gallery
 .gallery {
-  [data-items] {
+  // List container
+  [data-list] {
     @include clearfix;
     list-style-type: none;
     padding: 0.2em;
@@ -16,26 +14,65 @@
       padding: 1em;
     }
   }
+  // List item
   li {
     width: 33.33333%;
     float: left;
     padding: 0 0.25em 0.45em;
+    position: relative;
     
     @media #{$small} {
       padding: 0 0.5em 1em;
     }
+
+    // Starred
+    &.starred {
+      &::after {
+        content: '\2605';
+        position: absolute;
+        top: -0.5em;
+        right: -0.2em;
+        display: block;
+        z-index: 30;
+        
+        color: yellow;
+        background: #c29e27;
+        text-align: center;
+        height: 1.5em;
+        width: 1.5em;
+        line-height: 1.5em;
+        border-radius: 2em;
+        font-size: 1.5em;
+      }
+    }
+    // Inverted
+    &.inverted {
+      img {
+        -webkit-filter: invert(100%);
+      }
+    }
     
+    // Thumbnail inside list item
     img {
       width: 100%;
       border: 1px solid #ccc;
       padding: 0.25em;
       @media #{$small} { padding: 0.5em; }
+
+      // Basic hover state
+      &:hover {
+        border-color: black;
+        background: #eee;
+        cursor: pointer;
+      }
     }
+      // Selected state for images
       &.selected img {
         border-color: red;
         background-color: rgba(255,0,0,0.25);
       }
 
+    // Responsive adjustments: show more images on bigger screens
     @media #{$small} {
       width: 25%;
     }
@@ -48,7 +85,8 @@
   }
 }
 
-.editable [data-items] li {
+// When the gallery is selectable, zoom out to show more photos
+.editable [data-list] li {
   img { padding: 0.25em }
   width: 25%;
   
@@ -56,7 +94,8 @@
     width: 16.6666%;
   }
 }
-[data-items] li {
+// And animate the shift in size
+[data-list] li {
   &, .editable & {
     @include transition-property(width);
     @include transition-duration(150ms);

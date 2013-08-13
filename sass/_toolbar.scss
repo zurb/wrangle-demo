@@ -25,12 +25,14 @@
   white-space: nowrap;
   overflow-x: scroll;
   -webkit-overflow-scrolling: touch;
+  opacity: 0;
   
   .editable & {
     margin-bottom: 0%;
+    opacity: 1;
   }
   &, .editable & {
-    @include transition-property(all);
+    @include transition-property(margin-bottom);
     @include transition-duration(200ms);
     @include transition-timing-function(ease-out);
   }

@@ -4,22 +4,17 @@
 
 @import "foundation/components/global";
 @import "foundation/components/grid";
-// @import "foundation/components/visibility";
 @import "foundation/components/block-grid";
 @import "foundation/components/type";
 @import "foundation/components/buttons";
 @import "foundation/components/reveal";
 
-@import "drawselect";
+@import "wrangle";
 
 @import "header";
-@import "albums";
 @import "gallery";
 @import "toolbar";
-
-html {
-  -ms-content-zooming: none;
-}
+@import "modal";
 
 // @import "foundation/components/forms"; // *requires components/buttons
 // @import "foundation/components/custom-forms"; // *requires components/buttons, components/forms
