@@ -24,43 +24,28 @@
   </header>
 
   <div class="wrangle-demo">
-    <!-- Album browser -->
-    <div class="album-list">
-      <h2 href="toggle">Albums</h2>
-      <ul>
-        <li><a data-album-link="all">All photos</a></li>
-        <li><a data-album-link="dogs">Dogs</a></li>
-        <li><a data-album-link="cats">Cats</a></li>
-        <li><a data-album-link="cats">Cats</a></li>
-        <li><a data-album-link="cats">Cats</a></li>
-        <li><a data-album-link="cats">Cats</a></li>
-        <li><a data-album-link="cats">Cats</a></li>
-      </ul>
-    </div>
-    <!-- /Album browser -->
-
-    <div data-drawselect class="demo-main">
+    <div data-wrangle class="demo-main">
       <!-- Gallery view -->
       <div data-selectarea class="gallery">
         <canvas data-canvas></canvas>
-        <ul data-items>
+        <ul data-list>
           <li data-photo="1">
-            <img src="http://placehold.it/4x3" alt="Photo">
+            <img src="http://placekitten.com/400/300" alt="Photo">
           </li>
           <li data-photo="1">
-            <img src="http://placehold.it/4x3" alt="Photo">
+            <img src="http://placekitten.com/400/300" alt="Photo">
           </li>
           <li data-photo="1">
-            <img src="http://placehold.it/4x3" alt="Photo">
+            <img src="http://placekitten.com/400/300" alt="Photo">
           </li>
           <li data-photo="1">
-            <img src="http://placehold.it/4x3" alt="Photo">
+            <img src="http://placekitten.com/400/300" alt="Photo">
           </li>
           <li data-photo="1">
-            <img src="http://placehold.it/4x3" alt="Photo">
+            <img src="http://placekitten.com/400/300" alt="Photo">
           </li>
           <li data-photo="1">
-            <img src="http://placehold.it/4x3" alt="Photo">
+            <img src="http://placekitten.com/400/300" alt="Photo">
           </li>
           <li data-photo="1">
             <img src="http://placehold.it/4x3" alt="Photo">
@@ -133,7 +118,7 @@
         <div class="edit-toolbar">
           <a class="secondary button" data-edit>Cancel</a>
           <a class="button" data-action="star">Star</a>
-          <a class="button" data-action="move">Move</a>
+          <a class="button" data-action="invert">Invert</a>
           <a class="alert button" data-action="delete">Delete</a>
         </div>
       </div>
@@ -147,6 +132,10 @@
     <p>This is a demonstration of Wrangle, a jQuery plugin developed by ZURB.</p>
   </div>
 
+  <div class="photo-viewer">
+    <img>
+  </div>
+
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
   
   <script src="javascripts/foundation/foundation.js"></script>
@@ -154,13 +143,14 @@
   <script src="javascripts/foundation/foundation.placeholder.js"></script>
   <script src="javascripts/foundation/foundation.reveal.js"></script>
 
-  <script src="javascripts/vendor/jquery.drawselect.js"></script>
+  <script src="javascripts/vendor/jquery.wrangle.js"></script>
   <script src="javascripts/app.js"></script>
   
   <script>
     var options = {
       touchMode: 'auto',
-      selectToggle: false
+      selectToggle: false,
+      multiTouch: true,
     };
     var actions = {
       'delete': function(items) {
@@ -172,13 +162,40 @@
             return false;
           }
         }
+      },
+      'star': function(items) {
+        items.toggleClass('starred');
+      },
+      'invert': function(items) {
+        items.toggleClass('inverted');
       }
     };
 
     $(document).foundation();
     $(window).on('load', function() {
-      $(document).drawselect(options, actions);
-    })
+      $(document).wrangle(options, actions);
+    });
+
+    var $container = $('[data-wrangle]').eq(0);
+    var $modal     = $('.photo-viewer').eq(0);
+    var $modalImg  = $modal.children('img').eq(0);
+
+    $('[data-list] > li').click(function() {
+      if (!$container.hasClass('editable')) {
+        $modalImg.attr('src', $(this).children('img').attr('src'));
+
+        if ($(this).hasClass('inverted'))
+          $modal.addClass('inverted');
+        else
+          $modal.removeClass('inverted');
+
+        $modal.fadeIn(250);
+      }
+    });
+    $modal.on('click touchstart', function() {
+      $modal.fadeOut(250);
+      return false;
+    });
   </script>
 </body>
 </html>
