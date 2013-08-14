@@ -1626,10 +1626,10 @@ html {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 400px;
-  height: 300px;
-  margin-left: -200px;
-  margin-top: -150px;
+  width: 500px;
+  height: 375px;
+  margin-left: -250px;
+  margin-top: -188px;
 }
 /* line 22, ../sass/_modal.scss */
 .photo-viewer.inverted > img {
