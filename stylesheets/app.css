@@ -1547,41 +1547,36 @@ html {
 
 /* line 1, ../sass/_toolbar.scss */
 .toolbar {
+  position: relative;
   width: 100%;
   padding: 0.9375em;
   background: #eee;
   border: 1px solid #ccc;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  z-index: 50;
 }
-/* line 11, ../sass/_toolbar.scss */
+/* line 8, ../sass/_toolbar.scss */
 .toolbar .button {
   margin-bottom: 0;
   margin-right: 0.75em;
 }
 
-/* line 17, ../sass/_toolbar.scss */
+/* line 14, ../sass/_toolbar.scss */
 .edit-toolbar {
-  position: fixed;
+  position: absolute;
+  top: 0;
   left: 0;
-  bottom: 0;
+  display: none;
   width: 100%;
-  margin-bottom: -25%;
   padding: 0.9375em;
   background: #eee;
   white-space: nowrap;
   overflow-x: scroll;
   -webkit-overflow-scrolling: touch;
-  opacity: 0;
 }
-/* line 30, ../sass/_toolbar.scss */
+/* line 26, ../sass/_toolbar.scss */
 .editable .edit-toolbar {
-  margin-bottom: 0%;
-  opacity: 1;
+  display: block;
 }
-/* line 34, ../sass/_toolbar.scss */
+/* line 29, ../sass/_toolbar.scss */
 .edit-toolbar, .editable .edit-toolbar {
   -webkit-transition-property: margin-bottom;
   -moz-transition-property: margin-bottom;
@@ -1598,12 +1593,12 @@ html {
 }
 
 @media screen and (max-height: 21.875em) {
-  /* line 42, ../sass/_toolbar.scss */
+  /* line 37, ../sass/_toolbar.scss */
   .toolbar, .edit-toolbar {
     padding: 0.46875em;
   }
 
-  /* line 46, ../sass/_toolbar.scss */
+  /* line 41, ../sass/_toolbar.scss */
   .toolbar .button {
     font-size: 0.8125em;
   }

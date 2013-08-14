@@ -244,7 +244,7 @@
   Wrangle.prototype.getCoords = function(event) {
     var self = this;
     var coords = [];
-    var offset = self.$container.offset();
+    var offset = self.$selectarea.offset();
 
     // MSPointer event
     if (event.type.match(/MS/)) {

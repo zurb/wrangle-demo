@@ -1,12 +1,9 @@
 .toolbar {
+  position: relative;
   width: 100%;
   padding: $column-gutter / 2;
   background: #eee;
   border: 1px solid #ccc;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  z-index: 50;
   
   .button {
     margin-bottom: 0;
@@ -15,21 +12,19 @@
 }
 
 .edit-toolbar {
-  position: fixed;
+  position: absolute;
+  top: 0;
   left: 0;
-  bottom: 0;
+  display: none;
   width: 100%;
-  margin-bottom: -25%;
   padding: $column-gutter / 2;
   background: #eee;
   white-space: nowrap;
   overflow-x: scroll;
   -webkit-overflow-scrolling: touch;
-  opacity: 0;
   
   .editable & {
-    margin-bottom: 0%;
-    opacity: 1;
+    display: block;
   }
   &, .editable & {
     @include transition-property(margin-bottom);

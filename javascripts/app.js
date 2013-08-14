@@ -2,6 +2,7 @@
 
   var mt = navigator.userAgent.match(/(iPhone|iPod|iPad)/i) ? true : false;
   var options = {
+    lineColor: 'red',
     touchMode: 'auto',
     selectToggle: false,
     multiTouch: mt,
@@ -26,6 +27,10 @@
   };
 
   $(document).foundation();
+  $('#intro').foundation('reveal', 'open');
+  $('#intro-close').click(function(){
+    $('#intro').foundation('reveal', 'close');
+  });
   $(window).on('load', function() {
     $(document).wrangle(options, actions);
   });

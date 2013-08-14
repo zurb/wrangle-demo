@@ -25,6 +25,18 @@
 
   <div class="wrangle-demo">
     <div data-wrangle class="demo-main">
+      <!-- Toolbar -->
+      <div class="toolbar">
+        <a class="secondary button" data-edit>Start Demo</a>
+
+        <div class="edit-toolbar">
+          <a class="secondary button" data-edit>Cancel</a>
+          <a class="button" data-all>Select All</a>
+          <a class="button" data-clear>Select None</a>
+          <a class="alert button" data-action="delete">Delete</a>
+        </div>
+      </div>
+      <!-- /Toolbar -->
       <!-- Gallery view -->
       <div data-selectarea class="gallery">
         <canvas data-canvas></canvas>
@@ -92,21 +104,17 @@
         </ul>
       </div>
       <!-- /Gallery view -->
-
-      <!-- Toolbar -->
-      <div class="toolbar">
-        <a class="secondary button" data-edit>Edit</a>
-
-        <div class="edit-toolbar">
-          <a class="secondary button" data-edit>Cancel</a>
-          <a class="button" data-all>Select All</a>
-          <a class="button" data-action="star">Star</a>
-          <!-- <a class="button" data-action="invert">Invert</a> -->
-          <a class="alert button" data-action="delete">Delete</a>
-        </div>
-      </div>
-      <!-- /Toolbar -->
     </div>
+  </div>
+
+  <div id="intro" class="reveal-modal">
+    <a class="close-reveal-modal">x</a>
+    <h2>About this demo</h2>
+    <p>This is a basic demo of Wrangle, an experimental UI plugin by ZURB. Click a photo to view a larger version. To see the selection plugin in action, hit the "start demo" button at the top of the screen. Use your mouse or finger to draw a line and select images.</p>
+
+    <p>Learn more about how Wrangle was built on <a href="http://zurb.com/playground/wrangle-jquery-plugin">ZURBplayground</a>.</p>
+
+    <a class="button" id="intro-close">OK</a>
   </div>
 
   <div id="about" class="reveal-modal">
@@ -123,7 +131,6 @@
   
   <script src="javascripts/foundation/foundation.js"></script>
 	<script src="javascripts/foundation/foundation.joyride.js"></script>
-  <script src="javascripts/foundation/foundation.placeholder.js"></script>
   <script src="javascripts/foundation/foundation.reveal.js"></script>
 
   <script src="javascripts/vendor/jquery.wrangle.js"></script>
